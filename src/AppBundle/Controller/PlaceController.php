@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations\Get; //pour annotation de la route avec FOSRestBundle
+use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
+use FOS\RestBundle\View\View; // Utilisation de la vue de FOSRestBundle
 
 use AppBundle\Entity\Place;
 
@@ -18,7 +20,8 @@ class PlaceController extends Controller
 {
 
   /**
-   *@Get("/places")
+   *@Rest\View()
+   *@Rest\Get("/places")
    *
    */
 
@@ -26,18 +29,22 @@ class PlaceController extends Controller
    {
      $em=$this->getDoctrine()->getEntityManager();
      $places=$em->getRepository('AppBundle:Place')->findAll();
-     /* @var $places Place[] */
 
-     foreach($places as $place){
+
+    /* foreach($places as $place){
        $formatted[]=array('id'=>$place->getId(),'name'=>$place->getName(),'address'=>$place->getAddress());
 
-     }
+     }*/
+    // $viewHandler=$this->get('fos_rest.view_handler');
+     /*$view=View::create($places);
+     $view->setFormat('json');*/
 
-    return new JsonResponse($formatted);
+    return $places;
 
   }
   /**
-   *@Get("/places/{id}")
+   *@Rest\View()
+   *@Rest\Get("/places/{id}")
    *
    */
 
@@ -52,9 +59,7 @@ class PlaceController extends Controller
 
        throw new NotFoundHttpException(' 	Ressource non trouvée');
      }
-     $formatted[]=array('id'=>$place->getId(),'name'=>$place->getName(),'address'=>$place->getAddress());
-
-    return new JsonResponse($formatted);
+    return $place;
 
    }
 
