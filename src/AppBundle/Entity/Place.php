@@ -42,6 +42,11 @@ class Place
      */
     private $address;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Price", mappedBy="place")
+     * @var Price[]
+     */
+    protected $prices;
 
     /**
      * Get id
@@ -99,5 +104,46 @@ class Place
     public function getAddress()
     {
         return $this->address;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->prices = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add price
+     *
+     * @param \AppBundle\Entity\Price $price
+     *
+     * @return Place
+     */
+    public function addPrice(\AppBundle\Entity\Price $price)
+    {
+        $this->prices[] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Remove price
+     *
+     * @param \AppBundle\Entity\Price $price
+     */
+    public function removePrice(\AppBundle\Entity\Price $price)
+    {
+        $this->prices->removeElement($price);
+    }
+
+    /**
+     * Get prices
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPrices()
+    {
+        return $this->prices;
     }
 }
