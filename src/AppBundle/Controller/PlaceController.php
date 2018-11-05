@@ -100,6 +100,71 @@ class PlaceController extends Controller
 
     }
 
+    /**
+     * @Rest\View()
+     * @Rest\Put("/places/{id}")
+     */
+
+   public function updatePlaceAction(Request $request)
+   {
+     $em=$this->getDoctrine()->getEntityManager();
+     $place = $em->getRepository('AppBundle:Place')->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
+
+
+        if (empty($place)) {
+          //  return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+            return \FOS\RestBundle\View\View::create(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+
+        }
+
+        $form = $this->createForm(PlaceType::class, $place);
+
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+            // il est utilisé juste par soucis de clarté
+            $em->merge($place);
+            $em->flush();
+            return $place;
+        } else {
+            return $form;
+        }
+
+   }
+   /**
+     * @Rest\View()
+     * @Rest\Patch("/places/{id}")
+     */
+    public function patchPlaceAction(Request $request)
+    {
+        $place = $this->getDoctrine()->getEntityManager()
+                ->getRepository('AppBundle:Place')
+                ->find($request->get('id')); // L'identifiant en tant que paramètre n'est plus nécessaire
+
+        if (empty($place)) {
+            return new JsonResponse(['message' => 'Place not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $form = $this->createForm(PlaceType::class, $place);
+
+         // Le paramètre false dit à Symfony de garder les valeurs dans notre
+         // entité si l'utilisateur n'en fournit pas une dans sa requête
+        $form->submit($request->request->all(), false);
+
+        if ($form->isValid()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+            // il est utilisé juste par soucis de clarté
+            $em->merge($place);
+            $em->flush();
+            return $place;
+        } else {
+            return $form;
+        }
+    }
+
+
 
 
 
