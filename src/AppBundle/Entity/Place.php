@@ -43,10 +43,10 @@ class Place
     private $address;
 
     /**
-     * @ORM\OneToMany(targetEntity="Price", mappedBy="place")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Price", mappedBy="place",cascade={"persist"})
      * @var Price[]
      */
-    protected $prices;
+    private $prices;
 
     /**
      * Get id

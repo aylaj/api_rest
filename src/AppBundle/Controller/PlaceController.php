@@ -20,7 +20,7 @@ class PlaceController extends Controller
 {
 
   /**
-   *@Rest\View()
+   *@Rest\View(serializerGroups={"place"})
    *@Rest\Get("/places")
    *
    */
@@ -43,7 +43,7 @@ class PlaceController extends Controller
 
   }
   /**
-   *@Rest\View()
+   *@Rest\View(serializerGroups={"place"})
    *@Rest\Get("/places/{id}")
    *
    */
@@ -64,7 +64,7 @@ class PlaceController extends Controller
    }
 
    /**
-    *@Rest\View(statusCode=Response::HTTP_CREATED)
+    *@Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"place"})
     *@Rest\Post("/places")
     */
     public function postPlacesAction(Request $request)
@@ -84,7 +84,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT)
+     * @Rest\View(statusCode=Response::HTTP_NO_CONTENT, serializerGroups={"place"})
      * @Rest\Delete("/places/{id}")
      */
     public function removePlaceAction(Request $request)
@@ -92,8 +92,14 @@ class PlaceController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $place = $em->getRepository('AppBundle:Place')
                     ->find($request->get('id'));
+        $prices=$place->getPrices();
+        foreach($prices as $price){
+          $em->remove($price);
+
+        }
         if($place){
           $em->remove($place);
+
           $em->flush();
 
         }
@@ -101,7 +107,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Put("/places/{id}")
      */
 
@@ -133,7 +139,7 @@ class PlaceController extends Controller
 
    }
    /**
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"place"})
      * @Rest\Patch("/places/{id}")
      */
     public function patchPlaceAction(Request $request)

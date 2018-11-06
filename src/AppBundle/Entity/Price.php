@@ -36,10 +36,11 @@ class Price
     private $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Place", inversedBy="price")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place", inversedBy="prices", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
      * @var Place
      */
-    protected $place;
+    private $place;
 
     /**
      * Get id
