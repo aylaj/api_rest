@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use AppBundle\Form\ThemeType;
 use AppBundle\Entity\Theme;
+use FOS\RestBundle\Controller\Annotations\View;
 
 class ThemeController extends Controller
 {

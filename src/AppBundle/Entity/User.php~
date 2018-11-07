@@ -48,7 +48,16 @@ class User
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Preference", mappedBy="user",cascade={"persist"})
      * @var Preference[]
      */
-    private $Preferences;
+    private $preferences;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255)
+     */
+    private $password;
+
+    private $plainPassword;
 
     /**
      * Get id
@@ -130,5 +139,67 @@ class User
     public function getEmail()
     {
         return $this->email;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->Preferences = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add preference
+     *
+     * @param \AppBundle\Entity\Preference $preference
+     *
+     * @return User
+     */
+    public function addPreference(\AppBundle\Entity\Preference $preference)
+    {
+        $this->Preferences[] = $preference;
+
+        return $this;
+    }
+
+    /**
+     * Remove preference
+     *
+     * @param \AppBundle\Entity\Preference $preference
+     */
+    public function removePreference(\AppBundle\Entity\Preference $preference)
+    {
+        $this->Preferences->removeElement($preference);
+    }
+
+    /**
+     * Get preferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPreferences()
+    {
+        return $this->Preferences;
+    }
+
+    public function setPreferences($preferences)
+    {
+        $this->preferences = $preferences;
+    }
+
+    const MATCH_VALUE_THRESHOLD = 25;
+
+    public function preferencesMatch($themes)
+    {
+        $matchValue = 0;
+        foreach ($this->preferences as $preference) {
+            foreach ($themes as $theme) {
+                if ($preference->match($theme)) {
+                    $matchValue += $preference->getValue() * $theme->getValue();
+                }
+            }
+        }
+
+        return $matchValue >= self::MATCH_VALUE_THRESHOLD;
     }
 }

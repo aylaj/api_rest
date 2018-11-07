@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use AppBundle\Form\PriceType;
 use AppBundle\Entity\Price;
+use FOS\RestBundle\Controller\Annotations\View;
 
 class PriceController extends Controller
 {
@@ -23,7 +24,7 @@ class PriceController extends Controller
       if(empty($place)){
         return $this->placeNotFound();
       }
-      return $place->getPrice();
+      return $place->getPrices();
 
     }
 

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -49,6 +50,15 @@ class User
      * @var Preference[]
      */
     private $preferences;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255)
+     */
+    private $password;
+
+    protected $plainPassword;
 
     /**
      * Get id
@@ -148,7 +158,7 @@ class User
      */
     public function addPreference(\AppBundle\Entity\Preference $preference)
     {
-        $this->Preferences[] = $preference;
+        $this->preference[] = $preference;
 
         return $this;
     }
@@ -160,7 +170,7 @@ class User
      */
     public function removePreference(\AppBundle\Entity\Preference $preference)
     {
-        $this->Preferences->removeElement($preference);
+        $this->preferences->removeElement($preference);
     }
 
     /**
@@ -170,7 +180,7 @@ class User
      */
     public function getPreferences()
     {
-        return $this->Preferences;
+        return $this->preferences;
     }
 
     public function setPreferences($preferences)
@@ -192,5 +202,59 @@ class User
         }
 
         return $matchValue >= self::MATCH_VALUE_THRESHOLD;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function getRoles()
+    {
+        return [];
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // Suppression des données sensibles
+        $this->plainPassword = null;
+    }
+    public function getPlainPassword()
+    {
+      return $this->plainPassword;
+    }
+
+    public function setPlainPassword($plainPassword)
+    {
+      return $this->plainPassword=$plainPassword;
     }
 }
