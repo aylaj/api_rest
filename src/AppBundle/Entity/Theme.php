@@ -40,7 +40,7 @@ class Theme
      * @ORM\JoinColumn(nullable=false)
      * @var Place
      */
-    private $place;
+    protected $place;
     /**
      * Get id
      *

@@ -38,7 +38,7 @@ class Preference
      * @ORM\JoinColumn(nullable=false)
      * @var User
      */
-     private $user;
+     protected $user;
     /**
      * Get id
      *

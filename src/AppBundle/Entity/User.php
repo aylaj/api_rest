@@ -48,7 +48,7 @@ class User
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Preference", mappedBy="user",cascade={"persist"})
      * @var Preference[]
      */
-    private $Preferences;
+    private $preferences;
 
     /**
      * Get id
@@ -171,6 +171,11 @@ class User
     public function getPreferences()
     {
         return $this->Preferences;
+    }
+
+    public function setPreferences($preferences)
+    {
+        $this->preferences = $preferences;
     }
 
     const MATCH_VALUE_THRESHOLD = 25;

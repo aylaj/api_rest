@@ -148,9 +148,8 @@ class UserController extends Controller
      */
     public function getUserSuggestionsAction(Request $request)
     {
-        $user = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('AppBundle:User')
-                ->find($request->get('id'));
+        $em=$this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('AppBundle:User')->find($request->get('id'));
         /* @var $user User */
 
         if (empty($user)) {
@@ -159,9 +158,7 @@ class UserController extends Controller
 
         $suggestions = [];
 
-        $places = $this->get('doctrine.orm.entity_manager')
-                ->getRepository('AppBundle:Place')
-                ->findAll();
+        $places = $em->getRepository('AppBundle:Place')->findAll();
 
         foreach ($places as $place) {
             if ($user->preferencesMatch($place->getThemes())) {
