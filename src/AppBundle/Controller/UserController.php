@@ -77,6 +77,8 @@ class UserController extends Controller
             $encoder=$this->get('security.password_encoder');
             $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($encoded);
+            var_dump($user);
+            die;
             $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($user);
             $em->flush();

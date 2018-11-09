@@ -30,6 +30,7 @@ framework:
     assets: ~
     php_errors:
         log: true
+    serializer: { enable_annotations: true }
     serializer:
         enabled: true
 # Twig Configuration
@@ -42,7 +43,6 @@ fos_rest:
         include_format: false
     serializer:
         serialize_null: true
-        groups: []
     view:
         view_response_listener: 'force'
 
